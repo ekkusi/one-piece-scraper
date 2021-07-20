@@ -1,0 +1,15 @@
+{
+  "name": "1337xto-subscriber",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "server"
+  ],
+  "description": "1337xto scraper which sends emails when subscribed keywords are found",
+  "main": "index.js",
+  "author": "Ekku Sipilä",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}
