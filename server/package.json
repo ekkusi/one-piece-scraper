@@ -5,18 +5,34 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "develop": "NODE_ENV=development nodemon -V "
+    "build": "NODE_ENV=production tsc -p tsconfig-prod.json && cp ./node_modules/.prisma/client/index.d.ts ./lib/prisma.d.ts",
+    "develop": "NODE_ENV=development nodemon -V ",
+    "prisma-generate": "yarn prisma generate",
+    "update-prisma": "yarn prisma introspect && yarn prisma generate"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.4",
     "@types/node": "^16.3.3",
     "@types/node-fetch": "^2.5.11",
+    "@types/nodemailer": "^6.4.4",
+    "copyfiles": "^2.4.1",
     "nodemon": "^2.0.12",
+    "prisma": "^2.27.0",
     "ts-node": "^10.1.0"
   },
   "dependencies": {
+    "@prisma/client": "^2.27.0",
+    "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.10",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "google-auth-library": "^7.3.0",
     "node-fetch": "^2.6.1",
+    "nodemailer": "^6.6.3",
     "puppeteer": "^10.1.0"
   }
 }

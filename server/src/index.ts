@@ -1,5 +1,38 @@
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
 import checkIfIsValidResult from "./utils/checkIfIsValidResult";
 import scrape from "./utils/scrape";
+import config from "./config.json";
+import path from "path";
+import formatMail from "./utils/formatMail";
+
+dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
+
+const transporter = nodemailer.createTransport({
+  host: config.emailHost,
+  port: config.emailPort,
+  secure: false,
+  auth: {
+    user: process.env.SEND_EMAIL_USER,
+    pass: process.env.SEND_EMAIL_PASSWORD,
+  },
+  tls: {
+    minVersion: "TLSv1",
+  },
+});
+
+const sendMail = async () => {
+  try {
+    const result = await transporter.sendMail(
+      formatMail("ekku.eki@gmail.com", "one piece 980")
+    );
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+sendMail();
 
 const run = async () => {
   const promises = [];
@@ -23,4 +56,4 @@ const run = async () => {
   await Promise.all(promises);
 };
 
-run();
+// run();

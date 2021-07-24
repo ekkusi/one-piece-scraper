@@ -5,6 +5,12 @@
     "baseUrl": "src",
     "outDir": "lib",
     "noEmit": false,
+
     "declaration": true
-  }
+    // "paths": {
+    //   "express-session": ["types/express-session"]
+    // }
+  },
+  "include": ["src"],
+  "exclude": ["./src/prisma/runtime"]
 }

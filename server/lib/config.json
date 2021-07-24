@@ -1,0 +1,5 @@
+{
+    "scrapeBaseUrl": "https://www.1337xx.to",
+    "emailHost": "us2.smtp.mailhostbox.com",
+    "emailPort": 587
+}
