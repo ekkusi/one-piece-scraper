@@ -17,7 +17,6 @@ const SomeShit = (props: SomeShitProps): JSX.Element => {
 
   const save = async () => {
     setLoading(true);
-    console.log("Saving");
     const res = await fetch("/api/update-subscription", {
       method: "POST",
       body: JSON.stringify({
@@ -28,11 +27,10 @@ const SomeShit = (props: SomeShitProps): JSX.Element => {
       },
     });
 
-    console.log(res);
-
     if (res.status === 200) {
       const data = await res.json();
-      console.log(data);
+      const newUser: User = data.user;
+      setUser(newUser);
     }
     setLoading(false);
   };

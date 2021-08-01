@@ -5,6 +5,7 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import authMiddleWare from "./utils/authMiddleWare";
 import prismaClient from "./prismaClient";
+import { checkAndSendMail, sendStartSubscriptionMail } from "./utils/sendMails";
 
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
@@ -43,20 +44,31 @@ app.get("/api/me", authMiddleWare, async (req, res) => {
 });
 
 app.post("/api/update-subscription", authMiddleWare, async (req, res) => {
-  console.log("Updating subscription");
+  const userEmail = req.session.userEmail;
   const { searchString } = req.body;
   if (searchString === undefined) {
     res.status(400);
     res.json({ message: "You need to pass searchString parameter in body " });
   }
+  const searchWordsArray = searchString.split(", ");
+  const checkedArray = searchWordsArray[0] === "" ? [] : searchWordsArray;
+  const updatedUser = await prismaClient.user.update({
+    where: { email: userEmail },
+    data: {
+      search_words: checkedArray,
+    },
+  });
+  if (updatedUser.search_words.length > 0) {
+    await sendStartSubscriptionMail(updatedUser);
+    await checkAndSendMail(updatedUser);
+  }
   res.status(200);
   res.json({
-    message: "Updating",
+    user: updatedUser,
   });
 });
 
 app.post("/api/login", async (req, res) => {
-  console.log(JSON.stringify(req.body));
   const { token } = req.body;
   const ticket = await client.verifyIdToken({
     idToken: token,

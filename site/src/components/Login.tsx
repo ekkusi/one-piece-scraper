@@ -14,6 +14,8 @@ const Login = ({ login, logout }: LoginProps): JSX.Element => {
   const tryCookieLogin = async () => {
     setHasTriedCookieLogin(true);
     const res = await fetch("/api/me");
+    console.log(res);
+
     if (res.status !== 200) return;
     const user: User = await res.json();
     login(user);

@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import prismaClient from "../prismaClient";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  console.log("Checking auth");
   const userEmail = req.session.userEmail;
   if (typeof userEmail !== "string") {
     console.log("Not authorized");
@@ -13,7 +12,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const user = await prismaClient.user.findUnique({
     where: { email: userEmail },
   });
-  console.log(JSON.stringify(user));
   if (!user) {
     console.log("Not authorized");
     res.status(401);
