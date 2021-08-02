@@ -3,7 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": [
-    "server"
+    "server",
+    "site"
   ],
   "description": "1337xto scraper which sends emails when subscribed keywords are found",
   "main": "index.js",
