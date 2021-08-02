@@ -13,7 +13,7 @@ dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
 
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 const app = express();
 
 const sess = {
