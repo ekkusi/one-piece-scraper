@@ -16,6 +16,5 @@ exports.default = async (searchParams) => {
     searchTable.each((index, element) => {
         rows.push($(element).text());
     });
-    // console.log(searchTable);
     return rows;
 };

@@ -16,6 +16,9 @@
   "scripts": {
     "develop": "concurrently \"yarn --cwd server develop\" \"yarn --cwd site start\"",
     "stop": "bash scripts/killall.sh",
-    "postinstall": "yarn --cwd server prisma-generate && yarn --cwd server build"
+    "postinstall": "yarn --cwd server prisma-generate && yarn --cwd server build",
+    "build": "yarn --cwd server build && yarn --cwd site build",
+    "run:prod": "yarn --cwd server prod",
+    "send-mails": "yarn --cwd server send-mails"
   }
 }

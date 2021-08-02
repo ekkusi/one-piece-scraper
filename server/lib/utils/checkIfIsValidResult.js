@@ -9,7 +9,6 @@ exports.default = (searchString, resultRows) => {
         regexes.push(new RegExp(`${it.split("").join(".?")}`, "i"));
     });
     let returnValue = false;
-    console.log("Regexes: ", regexes.join(", "));
     resultRows.forEach((it) => {
         if (regexes.every((regex) => it.match(regex))) {
             returnValue = true;

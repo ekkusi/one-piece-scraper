@@ -1,31 +1,14 @@
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import GoogleLogin from "react-google-login";
+import { useGoogleLogin } from "react-google-login";
 import { User } from "1337xto-subscriber-server/lib/prisma";
 
 type LoginProps = {
   login: (user: User) => void;
-  logout: () => void;
 };
 
-const Login = ({ login, logout }: LoginProps): JSX.Element => {
+const Login = ({ login }: LoginProps): JSX.Element => {
   const [hasTriedCookieLogin, setHasTriedCookieLogin] = useState(false);
-
-  const tryCookieLogin = async () => {
-    setHasTriedCookieLogin(true);
-    const res = await fetch("/api/me");
-    console.log(res);
-
-    if (res.status !== 200) return;
-    const user: User = await res.json();
-    login(user);
-  };
-
-  useEffect(() => {
-    if (!hasTriedCookieLogin) {
-      tryCookieLogin();
-    }
-  });
 
   const handleLogin = async (googleData: any) => {
     const res = await fetch("/api/login", {
@@ -44,13 +27,27 @@ const Login = ({ login, logout }: LoginProps): JSX.Element => {
     }
   };
 
-  const handleLogout = async () => {
-    const res = await fetch("/api/logout", {
-      method: "POST",
-    });
-    await res.json();
-    logout();
+  const { signIn } = useGoogleLogin({
+    clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID || "",
+    onSuccess: handleLogin,
+    onFailure: handleLogin,
+    cookiePolicy: "single_host_origin",
+  });
+
+  const tryCookieLogin = async () => {
+    setHasTriedCookieLogin(true);
+    const res = await fetch("/api/me");
+
+    if (res.status !== 200) return;
+    const user: User = await res.json();
+    login(user);
   };
+
+  useEffect(() => {
+    if (!hasTriedCookieLogin) {
+      tryCookieLogin();
+    }
+  });
 
   return (
     <Flex
@@ -59,17 +56,13 @@ const Login = ({ login, logout }: LoginProps): JSX.Element => {
       justifyContent="center"
       alignItems="center"
     >
-      <Box>
-        <Heading as="h1">Kirjauduppa sissään</Heading>
-        <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
-          buttonText="Login"
-          onSuccess={handleLogin}
-          onFailure={handleLogin}
-          cookiePolicy={"single_host_origin"}
-        />
-        <Button onClick={handleLogout}>Logout</Button>
-      </Box>
+      <Flex direction="column" alignItems="center">
+        <Heading>1337xx.to hakubotti</Heading>
+        <Text mb="3">Astu nykyaikaan ja automatisoi torrenttihakusi:)</Text>
+        <Button onClick={() => signIn()} textAlign="center">
+          Kirjauppa sisään
+        </Button>
+      </Flex>
     </Flex>
   );
 };

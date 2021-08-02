@@ -11,8 +11,6 @@ export default (searchString: string, resultRows: string[]): boolean => {
 
   let returnValue = false;
 
-  console.log("Regexes: ", regexes.join(", "));
-
   resultRows.forEach((it) => {
     if (regexes.every((regex) => it.match(regex))) {
       returnValue = true;

@@ -22,6 +22,8 @@ const transporter = nodemailer.createTransport({
 export const checkAndSendMails = async () => {
   const users = await prismaClient.user.findMany();
   const promises = users.map((user) => {
+    console.log("User: " + user.email + " subscriptions:");
+    if (user.search_words.length === 0) console.log("No subscriptions");
     return checkAndSendMail(user);
   });
   await Promise.all(promises);
@@ -34,8 +36,10 @@ export const checkAndSendMail = async (user: User) => {
       const result = await transporter.sendMail(
         formatMail(user.email, searchString)
       );
-      console.log("Sent mail to ", user.email);
+      console.log("Match with search: " + searchString + ", sending mail");
+      return scrapeResult;
     }
+    console.log("No match with search: " + searchString + ", not sending mail");
     return scrapeResult;
   });
   return Promise.all(scrapePromises);
@@ -43,5 +47,4 @@ export const checkAndSendMail = async (user: User) => {
 
 export const sendStartSubscriptionMail = async (user: User) => {
   const result = await transporter.sendMail(formatBeginSubscriptionMail(user));
-  console.log(result);
 };

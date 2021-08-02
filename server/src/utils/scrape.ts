@@ -15,6 +15,5 @@ export default async (searchParams: string) => {
     rows.push($(element).text());
   });
 
-  // console.log(searchTable);
   return rows;
 };

@@ -1,11 +1,15 @@
 import bodyParser from "body-parser";
 import express from "express";
 import { OAuth2Client } from "google-auth-library";
-import session from "express-session";
+import session from "cookie-session";
+import dotenv from "dotenv";
+import path from "path";
 import cookieParser from "cookie-parser";
 import authMiddleWare from "./utils/authMiddleWare";
 import prismaClient from "./prismaClient";
-import { checkAndSendMail, sendStartSubscriptionMail } from "./utils/sendMails";
+import { checkAndSendMail, sendStartSubscriptionMail } from "./utils/mails";
+
+dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
 
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
@@ -70,6 +74,11 @@ app.post("/api/update-subscription", authMiddleWare, async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   const { token } = req.body;
+  if (!token) {
+    res.status(401);
+    res.json({ message: "Invalid Google auth token" });
+    return;
+  }
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: process.env.CLIENT_ID,
@@ -92,14 +101,24 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/logout", async (req, res) => {
-  await req.session.destroy(() => {
-    console.log("Logged out");
-  });
+  //@ts-ignore
+  req.session = null;
   res.status(200);
   res.json({
     message: "Logged out successfully",
   });
 });
+
+if (process.env.NODE_ENV === "production") {
+  // Compute the build path and index.html path
+  const buildPath = path.resolve(__dirname, "../../site/build");
+  const indexHtml = path.join(buildPath, "index.html");
+
+  // Setup build path as a static assets path
+  app.use(express.static(buildPath));
+  // Serve index.html on unmatched routes
+  app.get("*", (req, res) => res.sendFile(indexHtml));
+}
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

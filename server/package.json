@@ -8,10 +8,13 @@
     "build": "NODE_ENV=production tsc -p tsconfig-prod.json && cp ./node_modules/.prisma/client/index.d.ts ./lib/prisma.d.ts",
     "develop": "NODE_ENV=development nodemon -V ",
     "prisma-generate": "yarn prisma generate",
-    "update-prisma": "yarn prisma introspect && yarn prisma generate"
+    "update-prisma": "yarn prisma introspect && yarn prisma generate",
+    "prod": "NODE_ENV=production node lib/server.js",
+    "send-mails": "NODE_ENV=production node lib/sendMails.js"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
+    "@types/cookie-session": "^2.0.43",
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
     "@types/node": "^16.3.3",
@@ -27,6 +30,7 @@
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.10",
     "cookie-parser": "^1.4.5",
+    "cookie-session": "^1.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
