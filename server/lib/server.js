@@ -14,7 +14,7 @@ const prismaClient_1 = __importDefault(require("./prismaClient"));
 const mails_1 = require("./utils/mails");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", "..", ".env") });
 const client = new google_auth_library_1.OAuth2Client(process.env.CLIENT_ID);
-const port = 4000;
+const port = process.env.PORT || 4000;
 const app = express_1.default();
 const sess = {
     secret: "keyboard cat",
