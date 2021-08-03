@@ -1,10 +1,14 @@
 import nodemailer from "nodemailer";
+import path from "path";
+import dotenv from "dotenv";
 import prismaClient from "../prismaClient";
 import scrape from "./scrape";
 import config from "../config.json";
 import checkIfIsValidResult from "./checkIfIsValidResult";
 import formatMail, { formatBeginSubscriptionMail } from "./formatMail";
 import { User } from "@prisma/client";
+
+dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
 
 const transporter = nodemailer.createTransport({
   host: config.emailHost,

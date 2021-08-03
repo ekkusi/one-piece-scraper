@@ -24,11 +24,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendStartSubscriptionMail = exports.checkAndSendMail = exports.checkAndSendMails = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const path_1 = __importDefault(require("path"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const prismaClient_1 = __importDefault(require("../prismaClient"));
 const scrape_1 = __importDefault(require("./scrape"));
 const config_json_1 = __importDefault(require("../config.json"));
 const checkIfIsValidResult_1 = __importDefault(require("./checkIfIsValidResult"));
 const formatMail_1 = __importStar(require("./formatMail"));
+dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", "..", ".env") });
 const transporter = nodemailer_1.default.createTransport({
     host: config_json_1.default.emailHost,
     port: config_json_1.default.emailPort,
